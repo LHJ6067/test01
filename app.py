@@ -6,7 +6,7 @@ from pymongo import MongoClient
 client = MongoClient('mongodb+srv://jaejeonglee:8d5dqKiseNJdDliN@cluster0.ze5iksx.mongodb.net/?retryWrites=true&w=majority')
 
 reviewDB = client.reviewDB
-hospitalDB = client.hospitalDB
+hospitalDB = client.hospitalDB.hospitalInfo
 userDB = client.userDB
 
 # index-----------------------------------------------------------
@@ -16,8 +16,14 @@ def home():
 
 # index-----------------------------------------------------------
 @app.route('/hospital')
-def hospaial():
+def hospital():
     return render_template('hospitals.html')
+
+@app.route("/hospital", methods=["GET"])
+def hospitalInfo_get():
+    hospitalInfo_list = list(hospitalInfo.find({}, {'_id': False}))
+
+    return jsonify({'hospitalInfo_list': hospitalInfo_list})
 
 # detailPage-----------------------------------------------------------
 @app.route('/hospital/1')
