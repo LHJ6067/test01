@@ -11,10 +11,34 @@
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
 
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@200;300&display=swap" rel="stylesheet">
+
     <title>서울시 동물병원 목록</title>
     <style>
+        * {
+            font-family: 'IBM Plex Sans KR', sans-serif;
+        }
+        .form-control {
+            width: 50%;
+
+            margin: auto;
+
+            border: 5px solid lightskyblue;
+        }
+        .hosList {
+            width: 45%;
+
+            margin: 20px auto 0px auto;
+        }
+        .hospitalInfo {
+            border: 1px solid lightskyblue;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            padding-left: 20px;
+            padding-top: 10px;
+        }
         .hospitalInfo:hover {
-            background: silver;
+            background-color: aliceblue;
         }
     </style>
     <script>
@@ -22,13 +46,13 @@
             listing()
             $("#myInput").on("keyup", function () {
                 let value = $(this).val().toLowerCase();
-                $("#myTable tr").filter(function () {
+                $("#hosList div").filter(function () {
                     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
-            });
-        });
+                })
+            })
+        })
         function listing() {
-            $('#myTable').empty()
+            $('#hosList').empty()
             $.ajax({
                 type: 'GET',
                 url: '/hospitalInfo',
@@ -41,12 +65,12 @@
                         let phoneNum = rows[i]['phoneNum']
                         let pageNum = rows[i]['row_num']
 
-                        let temp_html = `<tr onclick="open_detailPage(${pageNum})" class="hospitalInfo">
-                                            <td>${hosName}</td>
-                                            <td>${address}</td>
-                                            <td>${phoneNum}</td>
-                                         </tr>`
-                        $('#myTable').append(temp_html)
+                        let temp_html = `<div onclick="open_detailPage(${pageNum})" class="hospitalInfo">
+                                            <p>${hosName}</p>
+                                            <p>${address}</p>
+                                            <p>${phoneNum}</p>
+                                         </div>`
+                        $('#hosList').append(temp_html)
                     }
                 }
             })
@@ -61,23 +85,10 @@
 </head>
 <body>
 <div class="container">
-    <h2>Filterable Table</h2>
-    <p>Type something in the input field to search the table for first names, last names or emails:</p>
-    <input class="form-control" id="myInput" type="text" placeholder="Search..">
-    <br>
-    <table class="table table-bordered table-striped">
-        <thead>
-        <tr>
-            <th>사업장명</th>
-            <th>주소</th>
-            <th>전화번호</th>
-        </tr>
-        </thead>
-        <tbody id="myTable">
-        </tbody>
-    </table>
-
-    <p>Note that we start the search in tbody, to prevent filtering the table headers.</p>
+    <h2>까미를 부탁해</h2>
+    <input class="form-control" id="myInput" type="text" placeholder="검색어를 입력해주세요">
+</div>
+<div id="hosList" class="hosList">
 </div>
 </body>
 </html>

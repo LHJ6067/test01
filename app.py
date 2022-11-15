@@ -8,20 +8,22 @@ client = MongoClient('mongodb+srv://jaejeonglee:8d5dqKiseNJdDliN@cluster0.ze5iks
 reviewDB = client.reviewDB
 hospitalInfo = client.hospitalDB.hospitalInfo
 userDB = client.userDB
+
+
 # index-----------------------------------------------------------
 # @app.route('/')
 # def home():
 #     return render_template('index.html')
 
 # index-----------------------------------------------------------
-@app.route('/hospital')
+@app.route('/hospital/')
 def hospital():
     return render_template('hospitals.html')
 
 @app.route("/hospitalInfo", methods=["GET"])
 def hospitalInfo_get():
     hospitalInfo_list = list(hospitalInfo.find({}, {'_id': False}))
-    print(hospitalInfo_list)
+
     return jsonify({'hospitalInfo_list': hospitalInfo_list})
 
 # detailPage-----------------------------------------------------------
@@ -46,11 +48,13 @@ def review_post():
         "review": review_receive
     }
     reviewDB.review.insert_one(doc)
+
     return jsonify({'msg': '작성 완료'})
 
 @app.route("/hospital/review", methods=["GET"])
 def review_get():
     all_reviews = list(reviewDB.review.find({}, {'_id': False}))
+
     return jsonify({'review': all_reviews})
 
 @app.route("/hospital/review/<review_num>", methods=["DELETE"])
