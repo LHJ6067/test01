@@ -17,6 +17,7 @@
     <style>
         * {
             font-family: 'IBM Plex Sans KR', sans-serif;
+
         }
         .form-control {
             width: 50%;
@@ -27,8 +28,15 @@
         }
         .hosList {
             width: 45%;
+            height: 200px;
 
             margin: 20px auto 0px auto;
+
+            overflow-y: scroll;
+
+            border: 5px solid lightskyblue;
+
+            display: none;
         }
         .hospitalInfo {
             border: 1px solid lightskyblue;
@@ -42,15 +50,25 @@
         }
     </style>
     <script>
-        $(document).ready(function () {
-            listing()
-            $("#myInput").on("keyup", function () {
-                let value = $(this).val().toLowerCase();
-                $("#hosList div").filter(function () {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        $(document).ready(
+            function open_box() {
+                const a = document.querySelector('input');
+                a.addEventListener('keyup', showBox());
+
+                function showBox() {
+                    $('#hosList').show()
+                    listing()
+                }
+
+                $("#myInput").on("keyup", function () {
+                    let value = $(this).val().toLowerCase();
+                    $("#hosList div").filter(function () {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    })
                 })
-            })
-        })
+            }
+        )
+
         function listing() {
             $('#hosList').empty()
             $.ajax({
