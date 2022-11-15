@@ -31,7 +31,7 @@
             $('#myTable').empty()
             $.ajax({
                 type: 'GET',
-                url: '/hospital',
+                url: '/hospitalInfo',
                 data: {},
                 success: function (response) {
                     let rows = response['hospitalInfo_list']
