@@ -65,6 +65,10 @@
     </style>
 
     <script>
+        const nowUrl = window.location.pathname
+
+        //row_num이랑 이거랑 비교해주시면 돼요!
+        const hospital_params =nowUrl.split("/")[2]
 
         // 학준
 
@@ -92,10 +96,10 @@
                 type: "GET",
                 url: "/hospital/review",
                 data: {},
-                success: function (response) {
+                success: function (response){
                     let rows = response["review"]
 
-                    for (let i = 0; i < rows.length; i++) {
+                    for (const i in rows){
                         let nickname = rows[i]['nickname']
                         let review = rows[i]['review']
                         let review_num = rows[i]['review_num']
@@ -118,7 +122,6 @@
                 }
             });
         }
-
         const reviewPressEnter = (e) => {
             if(e.key === "Enter"){
                 reviewPost();
@@ -142,6 +145,7 @@
             })
             reviewShow();
         })
+
         const reviewDelete = (num) => {
             $.ajax({
                 type: 'DELETE',
@@ -154,6 +158,7 @@
                 }
             })
         }
+
     </script>
 </head>
 <body class="bg-info">

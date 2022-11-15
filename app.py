@@ -18,19 +18,19 @@ userDB = client.userDB
 def hospital():
     return render_template('hospitals.html')
 
-@app.route("/hospital", methods=["GET"])
+@app.route("/hospitalInfo", methods=["GET"])
 def hospitalInfo_get():
     hospitalInfo_list = list(hospitalInfo.find({}, {'_id': False}))
-
+    print(hospitalInfo_list)
     return jsonify({'hospitalInfo_list': hospitalInfo_list})
 
 # detailPage-----------------------------------------------------------
-@app.route('/hospital/1')
-def detail():
+@app.route('/hospital/<params>')
+def detail(params):
     return render_template('detailPage.html')
-#
 
-#
+
+
 # # review
 @app.route("/hospital/review", methods=["POST"])
 def review_post():
