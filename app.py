@@ -3,13 +3,13 @@ from flask import Flask, render_template, request, jsonify
 app = Flask(__name__)
 
 from pymongo import MongoClient
-client = MongoClient('mongodb+srv://jaejeonglee:wjdwo2538!@cluster0.ze5iksx.mongodb.net/Cluster0?retryWrites=true&w=majority')
+client = MongoClient('mongodb+srv://jaejeonglee:8d5dqKiseNJdDliN@cluster0.ze5iksx.mongodb.net/?retryWrites=true&w=majority')
 hospitalInfo = client.hospitalDB.hospitalInfo
 
 # index-----------------------------------------------------------
-@app.route('/')
-def home():
-    return render_template('index.html')
+# @app.route('/')
+# def home():
+#     return render_template('index.html')
 
 # index-----------------------------------------------------------
 @app.route('/hospital')
@@ -23,10 +23,10 @@ def hospitalInfo_get():
     return jsonify({'hospitalInfo_list': hospitalInfo_list})
 
 # detailPage-----------------------------------------------------------
-@app.route('/hospital/1')
-def detail():
-    return render_template('detailPage.html')
-
+# @app.route('/hospital/1')
+# def detail():
+#     return render_template('detailPage.html')
+#
 
 # -----------------------------------------------
 if __name__ == '__main__':
