@@ -25,13 +25,13 @@ def hospitalInfo_get():
     return jsonify({'hospitalInfo_list': hospitalInfo_list})
 
 # detailPage-----------------------------------------------------------
-# @app.route('/hospital/1')
-# def detail():
-#     return render_template('detailPage.html')
+@app.route('/hospital/1')
+def detail():
+    return render_template('detailPage.html')
 #
 
-
-# review
+#
+# # review
 @app.route("/hospital/review", methods=["POST"])
 def review_post():
     nickname_receive = request.form['nickname_give']
