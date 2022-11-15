@@ -69,7 +69,6 @@
 
         //row_num이랑 이거랑 비교해주시면 돼요!
         const hospital_params =nowUrl.split("/")[2]
-
         // 학준
 
 
@@ -80,7 +79,7 @@
             let review =  $("#reviewTextArea").val()
             $.ajax({
                 type: 'POST',
-                url: '/hospital/review',
+                url: `/hospital/review/${hospital_params}`,
                 data: {
                     'nickname_give': nickname,
                     'review_give': review
@@ -103,8 +102,10 @@
                         let nickname = rows[i]['nickname']
                         let review = rows[i]['review']
                         let review_num = rows[i]['review_num']
+                        let url_params = rows[i]['hospital_params']
 
-                        let temp_html = `
+                        if(url_params === hospital_params){
+                            let temp_html = `
                             <li class='border border-info rounded p-3 d-flex align-items-center justify-content-between'>
                                 <div class="reviewText">
                                     <div class="review_nickname mb-2">${nickname}</div>
@@ -117,7 +118,8 @@
                                     >삭제</button>
                             </li>
                         `
-                        $("#reviewList").prepend(temp_html)
+                            $("#reviewList").prepend(temp_html)
+                        }
                     }
                 }
             });
