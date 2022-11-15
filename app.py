@@ -8,11 +8,10 @@ client = MongoClient('mongodb+srv://jaejeonglee:8d5dqKiseNJdDliN@cluster0.ze5iks
 reviewDB = client.reviewDB
 hospitalInfo = client.hospitalDB.hospitalInfo
 userDB = client.userDB
-
 # index-----------------------------------------------------------
-@app.route('/')
-def home():
-    return render_template('index.html')
+# @app.route('/')
+# def home():
+#     return render_template('index.html')
 
 # index-----------------------------------------------------------
 @app.route('/hospital')
@@ -29,10 +28,10 @@ def hospitalInfo_get():
 @app.route('/hospital/1')
 def detail():
     return render_template('detailPage.html')
+#
 
-
-
-# review
+#
+# # review
 @app.route("/hospital/review", methods=["POST"])
 def review_post():
     nickname_receive = request.form['nickname_give']

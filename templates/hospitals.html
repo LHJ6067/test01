@@ -39,16 +39,23 @@
                         let hosName = rows[i]['hosName']
                         let address = rows[i]['address']
                         let phoneNum = rows[i]['phoneNum']
+                        let pageNum = rows[i]['row_num']
 
-                        let temp_html = `<tr onclick="다른 페이지로 연결하기()" class="hospitalInfo">
+                        let temp_html = `<tr onclick="open_detailPage(${pageNum})" class="hospitalInfo">
                                             <td>${hosName}</td>
                                             <td>${address}</td>
                                             <td>${phoneNum}</td>
-                                        </tr>`
+                                         </tr>`
                         $('#myTable').append(temp_html)
                     }
                 }
             })
+        }
+
+        function open_detailPage(num) {
+            let url = '/hospital/' + num
+
+            window.location.replace(url)
         }
     </script>
 </head>
