@@ -2,9 +2,75 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+
+    <title>서울시 동물병원 목록</title>
+    <style>
+        .hospitalInfo:hover {
+            background: silver;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            listing()
+            $("#myInput").on("keyup", function () {
+                let value = $(this).val().toLowerCase();
+                $("#myTable tr").filter(function () {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+        });
+        function listing() {
+            $('#myTable').empty()
+            $.ajax({
+                type: 'GET',
+                url: '/hospitalInfo',
+                data: {},
+                success: function (response) {
+                    let rows = response['hospitalInfo_list']
+                    for (let i = 0; i < rows.length; i++) {
+                        let hosName = rows[i]['hosName']
+                        let address = rows[i]['address']
+                        let phoneNum = rows[i]['phoneNum']
+
+                        let temp_html = `<tr onclick="다른 페이지로 연결하기()" class="hospitalInfo">
+                                            <td>${hosName}</td>
+                                            <td>${address}</td>
+                                            <td>${phoneNum}</td>
+                                        </tr>`
+                        $('#myTable').append(temp_html)
+                    }
+                }
+            })
+        }
+    </script>
 </head>
 <body>
-  list
+<div class="container">
+    <h2>Filterable Table</h2>
+    <p>Type something in the input field to search the table for first names, last names or emails:</p>
+    <input class="form-control" id="myInput" type="text" placeholder="Search..">
+    <br>
+    <table class="table table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>사업장명</th>
+            <th>주소</th>
+            <th>전화번호</th>
+        </tr>
+        </thead>
+        <tbody id="myTable">
+        </tbody>
+    </table>
+
+    <p>Note that we start the search in tbody, to prevent filtering the table headers.</p>
+</div>
 </body>
 </html>
