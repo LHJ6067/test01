@@ -11,9 +11,9 @@ userDB = client.userDB
 
 
 # index-----------------------------------------------------------
-# @app.route('/')
-# def home():
-#     return render_template('index.html')
+@app.route('/')
+def home():
+    return render_template('index.html')
 
 # index-----------------------------------------------------------
 @app.route('/hospital/')
@@ -32,12 +32,12 @@ def detail(params):
     return render_template('detailPage.html')
 
 
-
 # # review
-@app.route("/hospital/review", methods=["POST"])
-def review_post():
+@app.route("/hospital/review/<params_receive>", methods=["POST"])
+def review_post(params_receive):
     nickname_receive = request.form['nickname_give']
     review_receive = request.form['review_give']
+    hospital_params = params_receive
 
     reviewtList = list(reviewDB.review.find({}, {'_id': False}))
 
@@ -45,7 +45,8 @@ def review_post():
     doc = {
         "review_num": count,
         "nickname": nickname_receive,
-        "review": review_receive
+        "review": review_receive,
+        "hospital_params": hospital_params
     }
     reviewDB.review.insert_one(doc)
 
