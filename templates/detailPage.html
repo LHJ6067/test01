@@ -92,10 +92,10 @@
                 type: "GET",
                 url: "/hospital/review",
                 data: {},
-                success: function (response) {
+                success: function (response){
                     let rows = response["review"]
 
-                    for (let i = 0; i < rows.length; i++) {
+                    for (const i in rows){
                         let nickname = rows[i]['nickname']
                         let review = rows[i]['review']
                         let review_num = rows[i]['review_num']
@@ -118,7 +118,6 @@
                 }
             });
         }
-
         const reviewPressEnter = (e) => {
             if(e.key === "Enter"){
                 reviewPost();
@@ -142,6 +141,7 @@
             })
             reviewShow();
         })
+
         const reviewDelete = (num) => {
             $.ajax({
                 type: 'DELETE',
@@ -154,6 +154,7 @@
                 }
             })
         }
+
     </script>
 </head>
 <body class="bg-info">

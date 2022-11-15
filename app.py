@@ -6,7 +6,7 @@ from pymongo import MongoClient
 client = MongoClient('mongodb+srv://jaejeonglee:8d5dqKiseNJdDliN@cluster0.ze5iksx.mongodb.net/?retryWrites=true&w=majority')
 
 reviewDB = client.reviewDB
-hospitalDB = client.hospitalDB.hospitalInfo
+hospitalInfo = client.hospitalDB.hospitalInfo
 userDB = client.userDB
 
 # index-----------------------------------------------------------
