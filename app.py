@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 
 app = Flask(__name__)
 
@@ -9,19 +9,14 @@ reviewDB = client.reviewDB
 hospitalInfo = client.hospitalDB.hospitalInfo
 userDB = client.userDB
 
-
-
 # index-----------------------------------------------------------
-@app.route('/')
-def home():
-    return render_template('index.html')
+# @app.route('/')
+# def home():
+#     return render_template('index.html')
 
 import certifi
 
 ca=certifi.where()
-
-client = MongoClient("mongodb+srv://test:test@cluster0.15fhovx.mongodb.net/test", tlsCAFile=ca)
-db = client.dbsparta_plus_week4
 
 # JWT 토큰을 만들 때 필요한 비밀문자열입니다. 아무거나 입력해도 괜찮습니다.
 # 이 문자열은 서버만 알고있기 때문에, 내 서버에서만 토큰을 인코딩(=만들기)/디코딩(=풀기) 할 수 있습니다.
@@ -46,8 +41,8 @@ def home():
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        user_info = db.user.find_one({"id": payload['id']})
-        return render_template('index.html', nickname=user_info["nick"])
+        user_info = userDB.user.find_one({"id": payload['id']})
+        return render_template('index.html')
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
@@ -80,7 +75,7 @@ def api_register():
 
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
 
-    db.user.insert_one({'id': id_receive, 'pw': pw_hash, 'nick': nickname_receive})
+    userDB.user.insert_one({'id': id_receive, 'pw': pw_hash, 'nick': nickname_receive})
 
     return jsonify({'result': 'success'})
 
@@ -96,7 +91,7 @@ def api_login():
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
 
     # id, 암호화된pw을 가지고 해당 유저를 찾습니다.
-    result = db.user.find_one({'id': id_receive, 'pw': pw_hash})
+    result = userDB.user.find_one({'id': id_receive, 'pw': pw_hash})
 
     # 찾으면 JWT 토큰을 만들어 발급합니다.
     if result is not None:
@@ -136,7 +131,7 @@ def api_valid():
 
         # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
         # 여기에선 그 예로 닉네임을 보내주겠습니다.
-        userinfo = db.user.find_one({'id': payload['id']}, {'_id': 0})
+        userinfo = userDB.user.find_one({'id': payload['id']}, {'_id': 0})
         return jsonify({'result': 'success', 'nickname': userinfo['nick']})
     except jwt.ExpiredSignatureError:
         # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
@@ -150,9 +145,17 @@ def api_valid():
 def hospital():
     return render_template('hospitals.html')
 
-@app.route("/hospitalInfo", methods=["GET"])
+@app.route("/hospitalInfo", methods=["POST"])
 def hospitalInfo_get():
+    gu_receive = request.form['gu_give']
+    hospitalInfo_list = list(hospitalInfo.find({'gu': gu_receive}, {'_id': False}))
+
+    return jsonify({'hospitalInfo_list': hospitalInfo_list})
+
+@app.route("/hospitalMain", methods=["GET"])
+def hospitalMain_get():
     hospitalInfo_list = list(hospitalInfo.find({}, {'_id': False}))
+
     return jsonify({'hospitalInfo_list': hospitalInfo_list})
 
 # detailPage-----------------------------------------------------------
@@ -178,11 +181,13 @@ def review_post(params_receive):
         "hospital_params": hospital_params
     }
     reviewDB.review.insert_one(doc)
+
     return jsonify({'msg': '작성 완료'})
 
 @app.route("/hospital/review", methods=["GET"])
 def review_get():
     all_reviews = list(reviewDB.review.find({}, {'_id': False}))
+
     return jsonify({'review': all_reviews})
 
 @app.route("/hospital/review/<review_num>", methods=["DELETE"])
