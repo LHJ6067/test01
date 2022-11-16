@@ -148,7 +148,6 @@ def hospital():
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_info = userDB.user.find_one({"id": payload['id']})
         return render_template('hospitals.html')
-
         return render_template('hospitals.html')
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
