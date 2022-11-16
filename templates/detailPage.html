@@ -9,6 +9,8 @@
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=90c42677ba48b855a3228b740c6dbd24&libraries=services"></script>
 
+    <link rel="icon" type="image/png" href="../static/ggami_icon_white.png"/>
+
     <title>까미를 부탁해</title>
 
     <style>
@@ -29,10 +31,9 @@
         }
         .title{
             color: #0DCAF0;
-            width: 300px;
+            width: 500px;
             margin: auto;
             text-align: center;
-
         }
         .logo{
 
@@ -226,7 +227,7 @@
                                 }
 
                             }
-                            $("#reviewLength").text(`한 줄 평 (${reviewLength})`)
+                            $("#reviewLength").text(`한 줄 평(${reviewLength})`)
                         }
                     });
                 }
@@ -275,7 +276,6 @@
     <div class="wrap d-flex align-items-center justify-content-between">
         <!-- 학준님 -->
        <div class="detailPage main rounded bg-white">
-
            <div class="logo" onclick="location.href='http://localhost:5000/hospital/';"> <!-- ec2서버설정할때 변경하기!! -->
              <img class="logo_image" src="https://i.ibb.co/FWJs5hX/Kakao-Talk-20221116-112334624.jpg" alt="...">
                <span class="logo_text">까미를부탁해</span>
@@ -324,7 +324,6 @@
              <div class="card" style="width: 500px;">
               <ul id= "fill_card" class="list-group list-group-flush"></ul>
             </div>
-
         </div>
 
 
