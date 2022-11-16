@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=90c42677ba48b855a3228b740c6dbd24&libraries=services"></script>
+
+    <title>까미를 부탁해</title>
+
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        * {
+            font-family: 'Pretendard';
+            font-size: 17px;
+        }
+        ul, ol, li {
+            list-style: none;
+        }
+        /* 학준 */
+        .card{
+            width: 200px;
+            border-radius: 5px;
+            margin: auto;
+            border-color: #0DCAF0;
+
+        }
+        .title{
+            color: #0DCAF0;
+            width: 300px;
+            margin: auto;
+            text-align: center;
+            margin-top: -100px;
+        }
+        .logo{
+            width: 150px;
+            object-position: left;
+            left: 16%;
+            top: 12%;
+        }
+        .img-thumbnail{
+            border-radius: 50%;
+            border:3px solid #0DCAF0;
+        }
+        .like{
+            margin: 30px auto auto auto;
+            background-color: #333333 ;
+            position: center;
+            width: 100px;
+        }
+        .kakaomap{
+            display: flex;
+            justify-content: center;
+            background-color: green;
+            margin: 50px auto 50px auto;
+            width: 500px;
+            height: 350px;
+            border-radius: 30px;
+        }
+        /* 재정 */
+
+        .wrap {
+            width: 1440px; height: 960px;
+            margin: 0 auto;
+        }
+        .detailPage {
+            width: 700px; height: 900px;
+            padding: 20px;
+        }
+        .reviewFormBox {
+            margin-bottom: 30px;
+        }
+        .reviewTextareaBox {
+            height: 110px;
+        }
+        .reviewTextareaBox>textarea {
+            resize: none;
+            width: 76%;
+            overflow: hidden;
+        }
+        .reviewListBox {
+            width: 100%; height: 650px;
+            overflow-y: scroll;
+        }
+        .reviewListBox::-webkit-scrollbar {
+            width: 5px;
+        }
+        .reviewListBox::-webkit-scrollbar-thumb {
+            background-color: #0DCAF0;
+            border-radius: 5px;
+        }
+        .reviewListBox::-webkit-scrollbar-track {
+            background-color: transparent;
+        }
+        .reviewListBox>ul {
+            padding-left: 0;
+        }
+        .reviewListBox>ul li{
+            height: 102px; width: 635px; margin-bottom: 20px;
+        }
+    </style>
+
+    <script>
+        const nowUrl = window.location.pathname
+        const hospital_params =nowUrl.split("/")[2]
+
+        // 학준
+        $(document).ready(function () {
+            fillblank();
+        });
+
+        function fillblank() {
+            $.ajax({
+                type: 'GET',
+                url: '/hospitalMain',
+                data: {},
+                success: function (response) {
+                    let rows = response['hospitalInfo_list']
+                    for (let i = 0; i < rows.length; i++) {
+                        let hosName = rows[i]['hosName']
+                        let phoneNumber = rows[i]['phoneNum']
+                        let address = rows[i]['address']
+                        let pagenumber = rows[i]['row_num']
+                        if (pagenumber === parseInt(hospital_params)) {
+                            let filling_a = `
+                                <li class="list-group-item">전화번호: ${phoneNumber} </li>
+                                <li class="list-group-item">주소: ${address}</li>
+                               `
+                            let filling_b = ` <div id="bbb" class="title"><h1>${hosName}</h1></div>`
+
+
+                            $('#fill_card').append(filling_a)
+                            $('#fill_title').append(filling_b)
+
+
+                        }
+                    }
+                }
+            });
+        }
+
+
+        // 재정
+
+
+        const reviewPost = () => {
+            let nickname = "이재정"
+            let review =  $("#reviewTextArea").val()
+            $.ajax({
+                type: 'GET',
+                url: '/api/nick',
+                data: {},
+                success: function (response) {
+                    console.log(response)
+                    nickname = response['nickname']
+
+                $.ajax({
+                    type: 'POST',
+                    url: `/hospital/review/${hospital_params}`,
+                    data: {
+                        'nickname_give': nickname,
+                        'review_give': review
+                    },
+                    success: function (response) {
+                        window.location.reload()
+                    }
+                })
+
+                }
+            })
+
+        }
+
+        const reviewShow = () => {
+            $.ajax({
+                type: 'GET',
+                url: '/api/nick',
+                data: {},
+                success: function (response) {
+                    cookieNick = response['nickname']
+
+                    $.ajax({
+                        type: "GET",
+                        url: "/hospital/review",
+                        data: {},
+                        success: function (response) {
+                            let rows = response["review"]
+
+                            for (const i in rows) {
+                                let nickname = rows[i]['nickname']
+                                let review = rows[i]['review']
+                                let review_num = rows[i]['review_num']
+                                let url_params = rows[i]['hospital_params']
+
+                                if (url_params === hospital_params){
+                                    if(cookieNick === nickname){
+                                        let temp_html = `
+                                        <li class='border border-info rounded p-3 d-flex align-items-center justify-content-between'>
+                                            <div class="reviewText">
+                                                <div class="review_nickname mb-2">${nickname}</div>
+                                                <div class="review_desc">${review}</div>
+                                            </div>
+                                            <button
+                                                type="button"
+                                                class="btn btn-info text-white h-75"
+                                                onclick="reviewDelete(${review_num})"
+                                                >삭제</button>
+                                        </li>
+                                    `
+                                        $("#reviewList").prepend(temp_html)
+                                    } else {
+                                        let temp_html = `
+                                        <li class='border border-info rounded p-3 d-flex align-items-center justify-content-between'>
+                                            <div class="reviewText">
+                                                <div class="review_nickname mb-2">${nickname}</div>
+                                                <div class="review_desc">${review}</div>
+                                            </div>
+                                        </li>
+                                    `
+                                        $("#reviewList").prepend(temp_html)
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        const reviewPressEnter = (e) => {
+            if(e.key === "Enter"){
+                reviewPost();
+            }
+        }
+
+        $(document).ready(function(){
+            $("#reviewTextArea").on("propertychange change paste input", function(){
+                let desc =  $("#reviewTextArea").val()
+                let len =  desc.length;
+                const textLimit = 30;
+
+                if(len >= textLimit){
+                    $("#reviewTextArea").val($("#reviewTextArea").val().substring(0, textLimit));
+                }
+                
+                let temp_html = `${len}/${textLimit}`
+                
+                $("#textAreaLimit").text(temp_html)
+                
+            })
+            reviewShow();
+        })
+
+        const reviewDelete = (num) => {
+            $.ajax({
+                type: 'DELETE',
+                url: `/hospital/review/${num}`,
+                data: {
+                    "review_num_give": num
+                },
+                success: function (response) {
+                    window.location.reload()
+                }
+            })
+        }
+
+    </script>
+</head>
+<body class="bg-info">
+    <div class="wrap d-flex align-items-center justify-content-between">
+        <!-- 학준님 -->
+       <div class="detailPage main rounded bg-white">
+              <div class="logo"><img src="https://i.ibb.co/JC1mrS7/Kakao-Talk-20221116-112334624.jpg" class="img-thumbnail" alt="...">
+        </div>
+            <div id="fill_title" class="title"></div>
+            <div class="like">
+                <button> 좋아요</button>
+            </div>
+        <div id="map" class="kakaomap"></div>
+            <script>
+                $.ajax({
+                type: "GET",
+                url: '/hospitalMain',
+                data: {},
+                success: function(response){
+                let rows = response['hospitalInfo_list']
+                for (let i = 0; i < rows.length; i++){
+                let address = rows[i]['address']
+                let pagenumber = rows[i]['row_num']
+                if (pagenumber === parseInt(hospital_params)){
+                            let kakao_address = address
+
+                                    var container = document.getElementById('map');
+                                    var options = {
+                                        center: new kakao.maps.LatLng(33.450701, 126.570667),
+                                        level: 3
+                                    };
+
+                                    var map = new kakao.maps.Map(container, options);
+                                    var geocoder = new kakao.maps.services.Geocoder();
+                                    geocoder.addressSearch(kakao_address, function(result, status) {
+
+                                        if (status === kakao.maps.services.Status.OK) {
+
+                                    var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                                    var marker = new kakao.maps.Marker({
+                                        map: map,
+                                        position: coords
+                                    });
+
+                                    map.setCenter(coords);
+                                }
+                            });
+                }
+            }
+        }
+    })
+        </script>
+            <div class="card" style="width: 500px;">
+              <ul id= "fill_card" class="list-group list-group-flush"></ul>
+            </div>
+        </div>
+        <!-- 재정님 -->
+        <div class="detailPage review rounded bg-white">
+            <div class="reviewFormBox">
+                <label
+                    for="reviewTextArea"
+                    class="form-label text-info"
+                >한 줄 평 남기기</label>
+                <div class="reviewTextareaBox border border-info rounded d-flex align-items-center justify-content-between p-3">
+                    <textarea
+                    class="form-control border border-0 px-0"
+                    id="reviewTextArea"
+                    placeholder="글 쓰기"
+                    onkeydown="reviewPressEnter(event)"
+                    rows="1"></textarea>
+                    <div id="textAreaLimit" class="textAreaLimit mt-4">
+                        0/30
+                    </div>
+                    <button
+                        type="button"
+                        onclick="reviewPost()"
+                        class="btn btn-info text-white h-75"
+                    >등록하기</button>
+                </div>
+            </div>
+            <label for="reviewList" class="text-info mb-2">한 줄 평</label>
+            <div class="reviewListBox">
+                <ul id="reviewList"></ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
