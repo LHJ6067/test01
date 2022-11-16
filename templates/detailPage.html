@@ -9,7 +9,6 @@
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=90c42677ba48b855a3228b740c6dbd24&libraries=services"></script>
 
-
     <title>까미를 부탁해</title>
 
     <style>
@@ -27,7 +26,6 @@
             border-radius: 5px;
             margin: auto;
             border-color: #0DCAF0;
-
         }
         .title{
             color: #0DCAF0;
@@ -37,6 +35,7 @@
 
         }
         .logo{
+
             height: 40px;
             display: inline-block;
             width: 180px;
@@ -51,7 +50,23 @@
         .logo_text{font-size: 24px;
         letter-spacing : 1px;
             vertical-align: bottom;
+
+            width: 150px;
+            object-position: left;
+            left: 16%;
+            top: 12%;
         }
+        .img-thumbnail{
+            border-radius: 50%;
+            border:3px solid #0DCAF0;
+        }
+        .like{
+            margin: 30px auto auto auto;
+            background-color: #333333 ;
+            position: center;
+            width: 100px;
+        }
+
 
         .kakaomap{
             display: flex;
@@ -61,7 +76,6 @@
             width: 500px;
             height: 350px;
             border-radius: 30px;
-
         }
         /* 재정 */
 
@@ -133,6 +147,7 @@
                                 <li class="list-group-item">주소: ${address}</li>
                                `
                             let filling_b = ` <div id="bbb" class="title"><h1>${hosName}</h1></div>`
+
                             $('#fill_card').append(filling_a)
                             $('#fill_title').append(filling_b)
                         }
@@ -142,11 +157,7 @@
         }
         // 학준
 
-
-
         // 재정
-
-
         const reviewPost = () => {
             let nickname = "이재정"
             let review =  $("#reviewTextArea").val()
@@ -189,7 +200,7 @@
                         data: {},
                         success: function (response) {
                             let rows = response["review"]
-
+                            let reviewLength = 0;
                             for (const i in rows) {
                                 let nickname = rows[i]['nickname']
                                 let review = rows[i]['review']
@@ -197,6 +208,7 @@
                                 let url_params = rows[i]['hospital_params']
 
                                 if (url_params === hospital_params){
+                                    reviewLength++
                                     if(cookieNick === nickname){
                                         let temp_html = `
                                         <li class='border border-info rounded p-3 d-flex align-items-center justify-content-between'>
@@ -224,7 +236,9 @@
                                         $("#reviewList").prepend(temp_html)
                                     }
                                 }
+
                             }
+                            $("#reviewLength").text(`한 줄 평 (${reviewLength})`)
                         }
                     });
                 }
@@ -278,11 +292,9 @@
              <img class="logo_image" src="https://i.ibb.co/FWJs5hX/Kakao-Talk-20221116-112334624.jpg" alt="...">
                <span class="logo_text">까미를부탁해</span>
            </div>
-
-
             <div id="fill_title" class="title"></div>
         <div id="map" class="kakaomap"></div>
-            <script>
+        <script>
                 $.ajax({
                 type: "GET",
                 url: '/hospitalMain',
@@ -293,38 +305,41 @@
                 let address = rows[i]['address']
                 let pagenumber = rows[i]['row_num']
                 if (pagenumber === parseInt(hospital_params)){
-                            let kakao_address = address
+                    let kakao_address = address
 
-                                    var container = document.getElementById('map');
-                                    var options = {
-                                        center: new kakao.maps.LatLng(33.450701, 126.570667),
-                                        level: 3
-                                    };
+                        var container = document.getElementById('map');
+                        var options = {
+                            center: new kakao.maps.LatLng(33.450701, 126.570667),
+                            level: 3
+                        };
 
-                                    var map = new kakao.maps.Map(container, options);
-                                    var geocoder = new kakao.maps.services.Geocoder();
-                                    geocoder.addressSearch(kakao_address, function(result, status) {
+                        var map = new kakao.maps.Map(container, options);
+                        var geocoder = new kakao.maps.services.Geocoder();
+                        geocoder.addressSearch(kakao_address, function(result, status) {
 
-                                        if (status === kakao.maps.services.Status.OK) {
+                            if (status === kakao.maps.services.Status.OK) {
 
-                                    var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-                                    var marker = new kakao.maps.Marker({
-                                        map: map,
-                                        position: coords
-                                    });
+                        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+                        var marker = new kakao.maps.Marker({
+                            map: map,
+                            position: coords
+                        });
 
-                                    map.setCenter(coords);
-                                }
-                            });
+                        map.setCenter(coords);
+                        }
+                    });
                 }
             }
         }
-    })
+                })
         </script>
              <div class="card" style="width: 500px;">
               <ul id= "fill_card" class="list-group list-group-flush"></ul>
             </div>
+
         </div>
+
+
         <!-- 재정님 -->
         <div class="detailPage review rounded bg-white">
             <div class="reviewFormBox">
@@ -349,7 +364,7 @@
                     >등록하기</button>
                 </div>
             </div>
-            <label for="reviewList" class="text-info mb-2">한 줄 평</label>
+            <label id="reviewLength" for="reviewList" class="text-info mb-2">한 줄 평(0)</label>
             <div class="reviewListBox">
                 <ul id="reviewList"></ul>
             </div>
