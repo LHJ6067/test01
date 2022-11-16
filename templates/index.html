@@ -1,7 +1,8 @@
 <!doctype html>
 <html lang="en">
     <head>
-
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
         <!-- Webpage Title -->
         <title>까미를 부탁해</title>
 
@@ -52,12 +53,43 @@
 
     </head>
     <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        .wrap {
+            width:1000px; height: 968px;
+            margin: auto;
+            overflow: hidden;
 
+        }
+        .loginimage {
+            width:400px; height: 400px;
+            margin: auto;
+            background-color: wheat;
+            margin-bottom: 45px;
+            background-image: url("../static/cat3.jpg");
+            background-size: cover;
+            background-position: center;
+        }
+        .logintitle {
+            font-family: 'Pretendard';
+            font-size: 30px;
+            color: cornsilk;
+            font-weight: bolder;
+            margin-bottom: 10px;
+
+        }
+        .IDPW {
+            font-family: 'Pretendard';
+            width: 380px; height: 180px;
+
+            margin: 0 auto;
+        }
     </style>
-    <body>
-        <div class="section has-text-centered">
-            <h1 class="title">로그인 페이지</h1>
-            <div class="container" style="width:60%">
+    <body class="bg-info">
+
+        <div class="wrap section has-text-centered">
+            <div class="loginimage"></div>
+            <h1 class="logintitle">까미를 부탁해</h1>
+            <div class="IDPW">
                 <div class="field is-horizontal">
                     <div class="field-label is-normal">
                         <label class="label" for="userid">ID</label>
@@ -83,9 +115,10 @@
                         </div>
                     </div>
                 </div>
-                <button class="button is-primary" onclick="login()">로그인</button>
-                <button class="button is-primary" onclick="register()">회원가입</button>
+                <button class="btn btn-outline-dark" onclick="login()">로그인</button>
+                <button class="btn btn-outline-dark" onclick="register()">회원가입</button>
             </div>
         </div>
     </body>
+
 </html>
