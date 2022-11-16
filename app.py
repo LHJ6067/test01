@@ -147,7 +147,7 @@ def hospital():
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_info = userDB.user.find_one({"id": payload['id']})
-        return render_template('hospitals.html', nickname=user_info['nick'])
+        return render_template('hospitals.html')
 
         return render_template('hospitals.html')
     except jwt.ExpiredSignatureError:
