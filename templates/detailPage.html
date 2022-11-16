@@ -46,12 +46,10 @@
             width: 33px;
             height: 33px;
             border-radius: 6px;
-
         }
         .logo_text{font-size: 24px;
         letter-spacing : 1px;
             vertical-align: bottom;
-
             width: 150px;
             object-position: left;
             left: 16%;
@@ -60,7 +58,6 @@
         .kakaomap{
             display: flex;
             justify-content: center;
-            background-color: green;
             margin: 50px auto 50px auto;
             width: 500px;
             height: 350px;
@@ -112,11 +109,14 @@
     <script>
         const nowUrl = window.location.pathname
         const hospital_params =nowUrl.split("/")[2]
-
         // 학준
         $(document).ready(function () {
             fillblank();
         });
+
+        function  star_cheak(){
+
+        }
 
         function fillblank() {
             $.ajax({
@@ -136,7 +136,6 @@
                                 <li class="list-group-item">주소: ${address}</li>
                                `
                             let filling_b = ` <div id="bbb" class="title"><h1>${hosName}</h1></div>`
-
                             $('#fill_card').append(filling_a)
                             $('#fill_title').append(filling_b)
                         }
@@ -145,7 +144,6 @@
             });
         }
         // 학준
-
         // 재정
         const reviewPost = () => {
             let nickname = "이재정"
@@ -157,7 +155,6 @@
                 success: function (response) {
                     console.log(response)
                     nickname = response['nickname']
-
                 $.ajax({
                     type: 'POST',
                     url: `/hospital/review/${hospital_params}`,
@@ -169,10 +166,8 @@
                         window.location.reload()
                     }
                 })
-
                 }
             })
-
         }
 
         const reviewShow = () => {
@@ -182,7 +177,6 @@
                 data: {},
                 success: function (response) {
                     cookieNick = response['nickname']
-
                     $.ajax({
                         type: "GET",
                         url: "/hospital/review",
@@ -195,7 +189,6 @@
                                 let review = rows[i]['review']
                                 let review_num = rows[i]['review_num']
                                 let url_params = rows[i]['hospital_params']
-
                                 if (url_params === hospital_params){
                                     reviewLength++
                                     if(cookieNick === nickname){
@@ -225,7 +218,6 @@
                                         $("#reviewList").prepend(temp_html)
                                     }
                                 }
-
                             }
                             $("#reviewLength").text(`한 줄 평(${reviewLength})`)
                         }
@@ -238,25 +230,19 @@
                 reviewPost();
             }
         }
-
         $(document).ready(function(){
             $("#reviewTextArea").on("propertychange change paste input", function(){
                 let desc =  $("#reviewTextArea").val()
                 let len =  desc.length;
                 const textLimit = 30;
-
                 if(len >= textLimit){
                     $("#reviewTextArea").val($("#reviewTextArea").val().substring(0, textLimit));
                 }
-                
                 let temp_html = `${len}/${textLimit}`
-                
                 $("#textAreaLimit").text(temp_html)
-                
             })
             reviewShow();
         })
-
         const reviewDelete = (num) => {
             $.ajax({
                 type: 'DELETE',
@@ -269,14 +255,13 @@
                 }
             })
         }
-
     </script>
 </head>
 <body class="bg-info">
     <div class="wrap d-flex align-items-center justify-content-between">
         <!-- 학준님 -->
        <div class="detailPage main rounded bg-white">
-           <div class="logo" onclick="window.location.replace('/hospital');"> <!-- ec2서버설정할때 변경하기!! -->
+           <div class="logo" onclick="window.location.replace('/hospital');">
              <img class="logo_image" src="https://i.ibb.co/FWJs5hX/Kakao-Talk-20221116-112334624.jpg" alt="...">
                <span class="logo_text">까미를부탁해</span>
            </div>
@@ -294,7 +279,6 @@
                 let pagenumber = rows[i]['row_num']
                 if (pagenumber === parseInt(hospital_params)){
                     let kakao_address = address
-
                         var container = document.getElementById('map');
                         var options = {
                             center: new kakao.maps.LatLng(33.450701, 126.570667),
