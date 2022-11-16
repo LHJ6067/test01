@@ -20,7 +20,7 @@
             list-style: none;
         }
         /* 학준 */
-.card{
+        .card{
             width: 200px;
             border-radius: 5px;
             margin: auto;
@@ -105,53 +105,88 @@
 
 
         // 재정
+
+
         const reviewPost = () => {
             let nickname = "이재정"
             let review =  $("#reviewTextArea").val()
             $.ajax({
-                type: 'POST',
-                url: `/hospital/review/${hospital_params}`,
-                data: {
-                    'nickname_give': nickname,
-                    'review_give': review
-                },
+                type: 'GET',
+                url: '/api/nick',
+                data: {},
                 success: function (response) {
-                    window.location.reload()
+                    console.log(response)
+                    nickname = response['nickname']
+
+                $.ajax({
+                    type: 'POST',
+                    url: `/hospital/review/${hospital_params}`,
+                    data: {
+                        'nickname_give': nickname,
+                        'review_give': review
+                    },
+                    success: function (response) {
+                        window.location.reload()
+                    }
+                })
+
                 }
             })
+
         }
 
         const reviewShow = () => {
             $.ajax({
-                type: "GET",
-                url: "/hospital/review",
+                type: 'GET',
+                url: '/api/nick',
                 data: {},
-                success: function (response){
-                    let rows = response["review"]
+                success: function (response) {
+                    cookieNick = response['nickname']
 
-                    for (const i in rows){
-                        let nickname = rows[i]['nickname']
-                        let review = rows[i]['review']
-                        let review_num = rows[i]['review_num']
-                        let url_params = rows[i]['hospital_params']
+                    $.ajax({
+                        type: "GET",
+                        url: "/hospital/review",
+                        data: {},
+                        success: function (response) {
+                            let rows = response["review"]
 
-                        if(url_params === hospital_params){
-                            let temp_html = `
-                            <li class='border border-info rounded p-3 d-flex align-items-center justify-content-between'>
-                                <div class="reviewText">
-                                    <div class="review_nickname mb-2">${nickname}</div>
-                                    <div class="review_desc">${review}</div>
-                                </div>
-                                <button
-                                    type="button"
-                                    class="btn btn-info text-white h-75"
-                                    onclick="reviewDelete(${review_num})"
-                                    >삭제</button>
-                            </li>
-                        `
-                            $("#reviewList").prepend(temp_html)
+                            for (const i in rows) {
+                                let nickname = rows[i]['nickname']
+                                let review = rows[i]['review']
+                                let review_num = rows[i]['review_num']
+                                let url_params = rows[i]['hospital_params']
+
+                                if (url_params === hospital_params){
+                                    if(cookieNick === nickname){
+                                        let temp_html = `
+                                        <li class='border border-info rounded p-3 d-flex align-items-center justify-content-between'>
+                                            <div class="reviewText">
+                                                <div class="review_nickname mb-2">${nickname}</div>
+                                                <div class="review_desc">${review}</div>
+                                            </div>
+                                            <button
+                                                type="button"
+                                                class="btn btn-info text-white h-75"
+                                                onclick="reviewDelete(${review_num})"
+                                                >삭제</button>
+                                        </li>
+                                    `
+                                        $("#reviewList").prepend(temp_html)
+                                    } else {
+                                        let temp_html = `
+                                        <li class='border border-info rounded p-3 d-flex align-items-center justify-content-between'>
+                                            <div class="reviewText">
+                                                <div class="review_nickname mb-2">${nickname}</div>
+                                                <div class="review_desc">${review}</div>
+                                            </div>
+                                        </li>
+                                    `
+                                        $("#reviewList").prepend(temp_html)
+                                    }
+                                }
+                            }
                         }
-                    }
+                    });
                 }
             });
         }
@@ -202,28 +237,10 @@
         </div>
             <div class="title"><h1>hosname</h1></div>
             <div class="like">
-                <button> 좋아요</button>
+                <button>좋아요</button>
             </div>
 
-       <div class="kakaomap" id="map" style="width:500px;height:400px; border-radius: 20px"></div>
-        <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=	90c42677ba48b855a3228b740c6dbd24"></script>
-        <script>
-            const container = document.getElementById('map');
-            const options = {
-                center: new kakao.maps.LatLng(33.450701, 126.570667),
-                level: 3
-            };
-            const map = new kakao.maps.Map(container, options);
-
-            var markerPosition  = new kakao.maps.LatLng(33.450701, 126.570667);
-
-            // 마커를 생성합니다
-            var marker = new kakao.maps.Marker({
-                position: markerPosition
-            });
-            // 마커가 지도 위에 표시되도록 설정합니다
-            marker.setMap(map);
-        </script>
+        <div class="kakaomap" id="map" style="width:500px;height:400px; border-radius: 20px"></div>
             <div class="card" style="width: 25rem;">
               <ul class="list-group list-group-flush">
                 <li class="list-group-item">전화번호: phonenumber</li>

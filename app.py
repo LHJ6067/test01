@@ -10,9 +10,6 @@ hospitalInfo = client.hospitalDB.hospitalInfo
 userDB = client.userDB
 
 # index-----------------------------------------------------------
-# @app.route('/')
-# def home():
-#     return render_template('index.html')
 
 import certifi
 
@@ -32,33 +29,36 @@ import datetime
 # 그렇지 않으면, 개발자(=나)가 회원들의 비밀번호를 볼 수 있으니까요.^^;
 import hashlib
 
-
 #################################
 ##  HTML을 주는 부분             ##
 #################################
 @app.route('/')
 def home():
+    return redirect(url_for("login"))
+
+@app.route('/login')
+def login():
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_info = userDB.user.find_one({"id": payload['id']})
-        return render_template('index.html')
+        return redirect(url_for("hospital"))
     except jwt.ExpiredSignatureError:
-        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+        return render_template('index.html');
     except jwt.exceptions.DecodeError:
-        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
-
-
-@app.route('/login')
-def login():
-    msg = request.args.get("msg")
-    return render_template('login.html', msg=msg)
-
+        return render_template('index.html');
 
 @app.route('/register')
 def register():
-    return render_template('register.html')
-
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = userDB.user.find_one({"id": payload['id']})
+        return redirect(url_for("hospital"))
+    except jwt.ExpiredSignatureError:
+        return render_template('register.html');
+    except jwt.exceptions.DecodeError:
+        return render_template('register.html');
 
 #################################
 ##  로그인을 위한 API            ##
@@ -143,7 +143,16 @@ def api_valid():
 # index-----------------------------------------------------------
 @app.route('/hospital/')
 def hospital():
-    return render_template('hospitals.html')
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = userDB.user.find_one({"id": payload['id']})
+        return render_template('hospitals.html', nickname=user_info['nick'])
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+
 
 @app.route("/hospitalInfo", methods=["POST"])
 def hospitalInfo_get():
@@ -161,8 +170,15 @@ def hospitalMain_get():
 # detailPage-----------------------------------------------------------
 @app.route('/hospital/<params>')
 def detail(params):
-    return render_template('detailPage.html')
-
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = userDB.user.find_one({"id": payload['id']})
+        return render_template('detailPage.html', nickname=user_info['nick'])
+    except jwt.ExpiredSignatureError:
+        return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
+    except jwt.exceptions.DecodeError:
+        return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
 # # review
 @app.route("/hospital/review/<params_receive>", methods=["POST"])
