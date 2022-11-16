@@ -7,9 +7,7 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=90c42677ba48b855a3228b740c6dbd24&libraries=services"></script>
-
 
     <title>까미를 부탁해</title>
 
@@ -34,9 +32,25 @@
             width: 300px;
             margin: auto;
             text-align: center;
-            margin-top: -100px;
+
         }
         .logo{
+
+            height: 40px;
+            display: inline-block;
+            width: 180px;
+            cursor: pointer;
+        }
+        .logo_image{
+            width: 33px;
+            height: 33px;
+            border-radius: 6px;
+
+        }
+        .logo_text{font-size: 24px;
+        letter-spacing : 1px;
+            vertical-align: bottom;
+
             width: 150px;
             object-position: left;
             left: 16%;
@@ -52,6 +66,8 @@
             position: center;
             width: 100px;
         }
+
+
         .kakaomap{
             display: flex;
             justify-content: center;
@@ -139,6 +155,8 @@
                 }
             });
         }
+        // 학준
+
         // 재정
         const reviewPost = () => {
             let nickname = "이재정"
@@ -269,13 +287,12 @@
     <div class="wrap d-flex align-items-center justify-content-between">
         <!-- 학준님 -->
        <div class="detailPage main rounded bg-white">
-          <div class="logo">
-              <img src="https://i.ibb.co/JC1mrS7/Kakao-Talk-20221116-112334624.jpg" class="img-thumbnail" alt="...">
-          </div>
+
+           <div class="logo" onclick="location.href='http://localhost:5000/hospital/';"> <!-- ec2서버설정할때 변경하기!! -->
+             <img class="logo_image" src="https://i.ibb.co/FWJs5hX/Kakao-Talk-20221116-112334624.jpg" alt="...">
+               <span class="logo_text">까미를부탁해</span>
+           </div>
             <div id="fill_title" class="title"></div>
-            <div class="like">
-                <button> 좋아요</button>
-            </div>
         <div id="map" class="kakaomap"></div>
         <script>
                 $.ajax({
@@ -316,10 +333,13 @@
         }
                 })
         </script>
-            <div class="card" style="width: 500px;">
+             <div class="card" style="width: 500px;">
               <ul id= "fill_card" class="list-group list-group-flush"></ul>
             </div>
-                </div>
+
+        </div>
+
+
         <!-- 재정님 -->
         <div class="detailPage review rounded bg-white">
             <div class="reviewFormBox">
