@@ -9,9 +9,8 @@ reviewDB = client.reviewDB
 hospitalInfo = client.hospitalDB.hospitalInfo
 userDB = client.userDB
 
-
-
 # index-----------------------------------------------------------
+
 import certifi
 
 ca=certifi.where()
@@ -30,13 +29,12 @@ import datetime
 # 그렇지 않으면, 개발자(=나)가 회원들의 비밀번호를 볼 수 있으니까요.^^;
 import hashlib
 
-
 #################################
 ##  HTML을 주는 부분             ##
 #################################
 @app.route('/')
 def home():
-    return redirect(url_for('login'));
+    return redirect(url_for("login"))
 
 @app.route('/login')
 def login():
@@ -156,9 +154,17 @@ def hospital():
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
 
-@app.route("/hospitalInfo", methods=["GET"])
+@app.route("/hospitalInfo", methods=["POST"])
 def hospitalInfo_get():
+    gu_receive = request.form['gu_give']
+    hospitalInfo_list = list(hospitalInfo.find({'gu': gu_receive}, {'_id': False}))
+
+    return jsonify({'hospitalInfo_list': hospitalInfo_list})
+
+@app.route("/hospitalMain", methods=["GET"])
+def hospitalMain_get():
     hospitalInfo_list = list(hospitalInfo.find({}, {'_id': False}))
+
     return jsonify({'hospitalInfo_list': hospitalInfo_list})
 
 # detailPage-----------------------------------------------------------
@@ -191,11 +197,13 @@ def review_post(params_receive):
         "hospital_params": hospital_params
     }
     reviewDB.review.insert_one(doc)
+
     return jsonify({'msg': '작성 완료'})
 
 @app.route("/hospital/review", methods=["GET"])
 def review_get():
     all_reviews = list(reviewDB.review.find({}, {'_id': False}))
+
     return jsonify({'review': all_reviews})
 
 @app.route("/hospital/review/<review_num>", methods=["DELETE"])

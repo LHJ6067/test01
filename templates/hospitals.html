@@ -11,29 +11,117 @@
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
 
-    <title>서울시 동물병원 목록</title>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@200;300&display=swap" rel="stylesheet">
+
     <style>
+        * {
+            font-family: 'IBM Plex Sans KR', sans-serif;
+            font-size: 15px;
+        }
+        .base {
+            width: 100%;
+            height: 100%;
+            background-color: #0DCAF0;
+        }
+        .headline {
+            width: 300px;
+
+            padding-top: 20px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .hosListBox {
+            width: 40%;
+
+            margin: auto;
+
+        }
+        .guList {
+            height: 37px;
+
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+        }
+        .dropdown-toggle {
+            width: 150px;
+            background-color: white;
+            color: #0DCAF0;
+            font-weight: bold;
+            border: 2px solid slategray;
+
+            margin-left: 70px;
+        }
+        .gu {
+            width: 100px;
+            height: 34px;
+            background-color: white;
+            color: slategray;
+            font-weight: bold;
+            border: 2px solid slategray;
+            margin-left: 200px;
+            margin-right: 50px;
+            border-radius: 5px;
+            padding-top: 2px;
+            padding-bottom: 2px;
+        }
+        .dropdown-item {
+            background-color: transparent;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .dropdown-item:hover {
+            background-color: aliceblue;
+        }
+        .hosName {
+            font-weight: bold;
+            color: #0DCAF0;
+        }
+        .hospitalInfo {
+            background-color: white;
+            width: 500px;
+
+            color: slategray;
+
+            border: 2px solid slategray;
+            border-radius: 10px;
+
+            margin: 10px auto 3px auto;
+
+            padding-left: 20px;
+            padding-top: 10px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
         .hospitalInfo:hover {
-            background: silver;
+            background-color: aliceblue;
         }
     </style>
+    <title>서울시 동물병원 목록</title>
     <script>
         $(document).ready(function () {
-            listing()
-            $("#myInput").on("keyup", function () {
-                let value = $(this).val().toLowerCase();
-                $("#myTable tr").filter(function () {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
-            });
+            showAll();
         });
-        function listing() {
-            $('#myTable').empty()
+        function showAll() {
+            $('#gu').empty()
+            $('#hosList').empty()
             $.ajax({
                 type: 'GET',
-                url: '/hospitalInfo',
+                url: '/hospitalMain',
                 data: {},
                 success: function (response) {
+                    let temp_html_gu = `<span>전체보기</span>`
+                    $('#gu').append(temp_html_gu)
                     let rows = response['hospitalInfo_list']
                     for (let i = 0; i < rows.length; i++) {
                         let hosName = rows[i]['hosName']
@@ -41,17 +129,53 @@
                         let phoneNum = rows[i]['phoneNum']
                         let pageNum = rows[i]['row_num']
 
-                        let temp_html = `<tr onclick="open_detailPage(${pageNum})" class="hospitalInfo">
-                                            <td>${hosName}</td>
-                                            <td>${address}</td>
-                                            <td>${phoneNum}</td>
-                                         </tr>`
-                        $('#myTable').append(temp_html)
+                        let temp_html = `<div onclick="open_detailPage(${pageNum})" class="hospitalInfo">
+                                            <p class="hosName">${hosName}</p>
+                                            <p>${address}</p>
+                                            <p><em>${phoneNum}</em></p>
+                                         </div>`
+                        $('#hosList').append(temp_html)
                     }
                 }
             })
         }
+        function guListing() {
+            $('#guMenu').empty()
+            let guName = ['영등포구', '중랑구', '서대문구', '마포구', '강남구', '구로구', '송파구', '금천구', '강동구', '중구','도봉구', '강서구', '성북구', '서초구', '노원구', '은평구', '종로구', '용산구', '양천구', '광진구', '성동구', '관악구', '동대문구', '동작구', '강북구']
+            for (let i = 0; i < guName.length; i++) {
+                let gu = guName[i]
+                let temp_html = `<li onclick="showHospital('${gu}')"><a class="dropdown-item" href="#">${gu}</a></li>`
 
+                $('#guMenu').append(temp_html)
+            }
+        }
+        function showHospital(gu) {
+            $('#gu').empty()
+            $('#hosList').empty()
+            $.ajax({
+                type: 'POST',
+                url: '/hospitalInfo',
+                data: {gu_give: gu},
+                success: function (response) {
+                    let temp_html_gu = `<span>${gu}</span>`
+                    $('#gu').append(temp_html_gu)
+                    let rows = response['hospitalInfo_list']
+                    for (let i = 0; i < rows.length; i++) {
+                        let hosName = rows[i]['hosName']
+                        let address = rows[i]['address']
+                        let phoneNum = rows[i]['phoneNum']
+                        let pageNum = rows[i]['row_num']
+
+                        let temp_html = `<div onclick="open_detailPage(${pageNum})" class="hospitalInfo">
+                                            <p class="hosName">${hosName}</p>
+                                            <p>${address}</p>
+                                            <p><em>${phoneNum}</em></p>
+                                         </div>`
+                        $('#hosList').append(temp_html)
+                    }
+                }
+            })
+        }
         function open_detailPage(num) {
             let url = '/hospital/' + num
 
@@ -60,24 +184,21 @@
     </script>
 </head>
 <body>
-<div class="container">
-    <h2>Filterable Table</h2>
-    <p>Type something in the input field to search the table for first names, last names or emails:</p>
-    <input class="form-control" id="myInput" type="text" placeholder="Search..">
-    <br>
-    <table class="table table-bordered table-striped">
-        <thead>
-        <tr>
-            <th>사업장명</th>
-            <th>주소</th>
-            <th>전화번호</th>
-        </tr>
-        </thead>
-        <tbody id="myTable">
-        </tbody>
-    </table>
-
-    <p>Note that we start the search in tbody, to prevent filtering the table headers.</p>
+<div class="base">
+    <h1 class="headline">까미를 부탁해
+    </h1>
+    <div class="hosListBox">
+        <div id="guList" class="guList">
+            <button onclick="guListing()" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                구별 검색
+            </button> <button id="gu" class="gu"></button>
+            <ul id="guMenu" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+            </ul>
+        </div>
+        <div id="hosList" class="hosList">
+        </div>
+    </div>
 </div>
 </body>
 </html>
