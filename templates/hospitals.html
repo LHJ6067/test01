@@ -26,12 +26,19 @@
         .headline {
             width: 300px;
 
+            font-weight: bold;
+
             padding-top: 20px;
 
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             justify-content: center;
             align-items: center;
+
+            cursor: default;
+        }
+        .ggami_icon {
+            margin-right: 5px;
         }
         .hosListBox {
             width: 40%;
@@ -54,20 +61,29 @@
             font-weight: bold;
             border: 2px solid slategray;
 
-            margin-left: 70px;
+            margin-left: 0px;
         }
         .gu {
-            width: 100px;
+            width: 120px;
             height: 34px;
             background-color: white;
             color: slategray;
             font-weight: bold;
             border: 2px solid slategray;
-            margin-left: 200px;
-            margin-right: 50px;
+            margin-left: 230px;
+            margin-right: 0px;
             border-radius: 5px;
-            padding-top: 2px;
-            padding-bottom: 2px;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+
+            cursor: default;
+        }
+        .listNum {
+            font-size: 10px;
+            margin-left: 3px;
         }
         .dropdown-item {
             background-color: transparent;
@@ -80,9 +96,22 @@
         .dropdown-item:hover {
             background-color: aliceblue;
         }
+        .address {
+            width: 450px;
+
+            display: inline-block;
+            text-align: center;
+
+            white-space:nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
         .hosName {
             font-weight: bold;
             color: #0DCAF0;
+        }
+        .phoneNum {
+            color: black;
         }
         .hospitalInfo {
             background-color: white;
@@ -102,6 +131,8 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
+
+            cursor: cell;
         }
         .hospitalInfo:hover {
             background-color: aliceblue;
@@ -120,9 +151,22 @@
                 url: '/hospitalMain',
                 data: {},
                 success: function (response) {
-                    let temp_html_gu = `<span>전체보기</span>`
-                    $('#gu').append(temp_html_gu)
                     let rows = response['hospitalInfo_list']
+                    let listNum = rows.length
+                    let temp_html_gu = `<span>전체보기<em class="listNum">${listNum}/${listNum}</em></span>`
+                    $('#gu').append(temp_html_gu)
+                    rows.sort((a, b) => {
+                        let fa = a.hosName.toLowerCase(),
+                            fb = b.hosName.toLowerCase();
+
+                        if (fa < fb) {
+                            return -1;
+                        }
+                        if (fa > fb) {
+                            return 1;
+                        }
+                        return 0;
+                    });
                     for (let i = 0; i < rows.length; i++) {
                         let hosName = rows[i]['hosName']
                         let address = rows[i]['address']
@@ -131,8 +175,8 @@
 
                         let temp_html = `<div onclick="open_detailPage(${pageNum})" class="hospitalInfo">
                                             <p class="hosName">${hosName}</p>
-                                            <p>${address}</p>
-                                            <p><em>${phoneNum}</em></p>
+                                            <p class="address">${address}</p>
+                                            <p><em class="phoneNum">${phoneNum}</em></p>
                                          </div>`
                         $('#hosList').append(temp_html)
                     }
@@ -141,7 +185,9 @@
         }
         function guListing() {
             $('#guMenu').empty()
-            let guName = ['영등포구', '중랑구', '서대문구', '마포구', '강남구', '구로구', '송파구', '금천구', '강동구', '중구','도봉구', '강서구', '성북구', '서초구', '노원구', '은평구', '종로구', '용산구', '양천구', '광진구', '성동구', '관악구', '동대문구', '동작구', '강북구']
+            let temp_html = `<li onclick="showAll()"><a class="dropdown-item" href="#">전체보기</a></li>`
+            $('#guMenu').append(temp_html)
+            let guName = ['영등포구', '중랑구', '서대문구', '마포구', '강남구', '구로구', '송파구', '금천구', '강동구', '중구','도봉구', '강서구', '성북구', '서초구', '노원구', '은평구', '종로구', '용산구', '양천구', '광진구', '성동구', '관악구', '동대문구', '동작구', '강북구'].sort()
             for (let i = 0; i < guName.length; i++) {
                 let gu = guName[i]
                 let temp_html = `<li onclick="showHospital('${gu}')"><a class="dropdown-item" href="#">${gu}</a></li>`
@@ -157,9 +203,22 @@
                 url: '/hospitalInfo',
                 data: {gu_give: gu},
                 success: function (response) {
-                    let temp_html_gu = `<span>${gu}</span>`
-                    $('#gu').append(temp_html_gu)
                     let rows = response['hospitalInfo_list']
+                    let listNum = rows.length
+                    let temp_html_gu = `<span>${gu}<em class="listNum">${listNum}/911</em></span>`
+                    $('#gu').append(temp_html_gu)
+                    rows.sort((a, b) => {
+                        let fa = a.hosName.toLowerCase(),
+                            fb = b.hosName.toLowerCase();
+
+                        if (fa < fb) {
+                            return -1;
+                        }
+                        if (fa > fb) {
+                            return 1;
+                        }
+                        return 0;
+                    });
                     for (let i = 0; i < rows.length; i++) {
                         let hosName = rows[i]['hosName']
                         let address = rows[i]['address']
@@ -168,8 +227,8 @@
 
                         let temp_html = `<div onclick="open_detailPage(${pageNum})" class="hospitalInfo">
                                             <p class="hosName">${hosName}</p>
-                                            <p>${address}</p>
-                                            <p><em>${phoneNum}</em></p>
+                                            <p class="address">${address}</p>
+                                            <p><em class="phoneNum">${phoneNum}</em></p>
                                          </div>`
                         $('#hosList').append(temp_html)
                     }
@@ -185,14 +244,14 @@
 </head>
 <body>
 <div class="base">
-    <h1 class="headline">까미를 부탁해
+     <h1 class="headline"><img class="ggami_icon" src="/static/ggami_icon_background.jpg" width="50px" height="50px"/>까미를 부탁해
     </h1>
     <div class="hosListBox">
         <div id="guList" class="guList">
             <button onclick="guListing()" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
                     data-bs-toggle="dropdown" aria-expanded="false">
                 구별 검색
-            </button> <button id="gu" class="gu"></button>
+            </button> <div id="gu" class="gu"></div>
             <ul id="guMenu" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
             </ul>
         </div>
