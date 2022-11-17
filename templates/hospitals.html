@@ -42,11 +42,10 @@
         .ggami_icon {
             margin-right: 5px;
         }
-        .hosListBox {
+        .wrap {
             width: 40%;
 
             margin: auto;
-
         }
         .guList {
             height: 37px;
@@ -98,6 +97,10 @@
         .dropdown-item:hover {
             background-color: aliceblue;
         }
+        .hosName {
+            font-weight: bold;
+            color: #0DCAF0;
+        }
         .address {
             width: 450px;
 
@@ -107,10 +110,6 @@
             white-space:nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-        }
-        .hosName {
-            font-weight: bold;
-            color: #0DCAF0;
         }
         .phoneNum {
             color: black;
@@ -139,8 +138,33 @@
         .hospitalInfo:hover {
             background-color: aliceblue;
         }
+        @media (max-width: 1245px) {
+            .hosListBox {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+            .guList {
+                flex-direction: column;
+                margin-top: 20px;
+                margin-bottom: 20px;
+            }
+            .gu {
+                margin-left: 0px;
+                margin-top: 10px;
+            }
+        }
+        @media (max-width: 570px) {
+            .hospitalInfo {
+                width: 100%;
+            }
+            .address {
+                width: 78.9474vw;
+            }
+        }
     </style>
-    <title>까마를 부탁해 - 서울시 동물병원 목록</title>
+    <title>까미를 부탁해 - 서울시 동물병원 목록</title>
     <script>
         $(document).ready(function () {
             showAll();
@@ -246,20 +270,26 @@
 </head>
 <body>
 <div class="base">
-     <h1 class="headline"><img class="ggami_icon" src="/static/ggami_icon_background.jpg" width="50px" height="50px"/>까미를 부탁해
+    <h1 class="headline"><img class="ggami_icon" src="/static/ggami_icon_background.jpg" width="50px" height="50px"/>까미를
+        부탁해
     </h1>
-    <div class="hosListBox">
+    <div class="wrap">
         <div id="guList" class="guList">
-            <button onclick="guListing()" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+            <button onclick="guListing()" class="btn btn-secondary dropdown-toggle" type="button"
+                    id="dropdownMenuButton1"
                     data-bs-toggle="dropdown" aria-expanded="false">
                 구별 검색
-            </button> <div id="gu" class="gu"></div>
+            </button>
+            <div id="gu" class="gu"></div>
             <ul id="guMenu" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
             </ul>
         </div>
-        <div id="hosList" class="hosList">
+        <div class="hosListBox">
+            <div id="hosList" class="hosList">
+            </div>
         </div>
     </div>
 </div>
+
 </body>
 </html>
