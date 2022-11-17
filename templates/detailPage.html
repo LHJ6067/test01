@@ -25,7 +25,7 @@
         }
         /* 학준 */
         .card{
-            width: 200px;
+            width: 500px;
             border-radius: 5px;
             margin: auto;
             border-color: #0DCAF0;
@@ -56,6 +56,7 @@
             left: 16%;
             top: 12%;
             font-family: 'Gamja Flower', cursive;
+            font-weight: bold;
         }
         .kakaomap{
             display: flex;
@@ -107,6 +108,41 @@
         .reviewListBox>ul li{
             height: 102px; width: 635px; margin-bottom: 20px;
         }
+        @media (max-width: 1450px) {
+            .wrap {
+                width: 100vw;
+                flex-direction: column;
+            }
+            .detailPage {
+                margin: 20px auto;
+            }
+        }
+        @media (max-width: 750px) {
+            .detailPage {
+                width: 93.3333vw;
+                height: auto;
+            }
+            .card {
+                width: 66.6667vw;
+            }
+            .reviewListBox>ul li {
+                width: 100%;
+            }
+            .reviewTextareaBox {
+                flex-direction: column;
+                height: auto;
+            }
+            .kakaomap {
+                width: 66.6667vw;
+                height: 66.6667vw;
+            }
+            .reviewListBox {
+                height: auto;
+            }
+            .title {
+                width: 66.6667vw;
+            }
+        }
     </style>
 
     <script>
@@ -143,6 +179,10 @@
         }
         // 학준
         // 재정
+        window.onpopstate = function(event) {
+            window.location.replace("/hospital")
+        }
+
         const reviewPost = () => {
             let nickname = "이재정"
             let review =  $("#reviewTextArea").val()
@@ -303,7 +343,7 @@
         }
                 })
         </script>
-             <div class="card" style="width: 500px;">
+             <div class="card">
               <ul id= "fill_card" class="list-group list-group-flush"></ul>
             </div>
         </div>

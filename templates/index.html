@@ -57,10 +57,10 @@
     </head>
     <style>
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        @import url('https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap');
+
         .wrap {
             width:100%; height: 968px;
-            margin: auto;
-            overflow: hidden;
         }
         .loginimage {
             width:400px; height: 400px;
@@ -72,7 +72,7 @@
             background-position: center;
         }
         .logintitle {
-            font-family: 'IBM Plex Sans KR', sans-serif;
+            font-family: 'Gamja Flower', cursive;
             font-size: 90px;
             color: black;
             font-weight: bolder;
@@ -83,8 +83,23 @@
             width: 380px; height: 180px;
             margin: 0 auto;
         }
+        @media (max-width: 600px) {
+            .logintitle {
+                width: 100%;
+                font-size: 12vw;
+            }
+            .loginimage {
+                width: 100%; height: 60vw;
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-color: transparent;
+            }
+            .IDPW {
+                width: 70vw;
+            }
+        }
     </style>
-    <body class="bg-info">
+    <body class="bg-info" style="height: 100%">
         <div class="wrap section has-text-centered">
             <div class="loginimage"></div>
             <h1 class="logintitle">까미를 부탁해</h1>
