@@ -16,6 +16,7 @@
     <link rel="icon" type="image/png" href="../static/ggami_icon_white.png"/>
 
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap');
         * {
             font-family: 'IBM Plex Sans KR', sans-serif;
             font-size: 15px;
@@ -27,17 +28,14 @@
         }
         .headline {
             width: 300px;
-
             font-weight: bold;
-
             padding-top: 20px;
-
             display: flex;
             flex-direction: row;
             justify-content: center;
             align-items: center;
-
             cursor: default;
+            font-family: 'Gamja Flower', cursive;
         }
         .ggami_icon {
             margin-right: 5px;
@@ -49,7 +47,6 @@
         }
         .guList {
             height: 37px;
-
             display: flex;
             flex-direction: row;
             justify-content: center;
@@ -276,9 +273,8 @@
 <body>
 <div class="base">
     <div class="headWrap">
-        <h1 class="headline"><img class="ggami_icon" src="/static/ggami_icon_background.jpg" width="50px"
-                                  height="50px"/>까미를
-            부탁해
+        <h1 id="logo_text" class="headline"><img class="ggami_icon" src="/static/ggami_icon_background.jpg" width="50px"
+                                  height="50px"/>까미를 부탁해
         </h1>
     </div>
     <div class="wrap">

@@ -15,6 +15,7 @@
 
     <style>
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        @import url('https://fonts.googleapis.com/css2?family=Gamja+Flower&display=swap');
         * {
             font-family: 'Pretendard';
             font-size: 17px;
@@ -48,12 +49,14 @@
             border-radius: 6px;
         }
         .logo_text{font-size: 24px;
-        letter-spacing : 1px;
+            letter-spacing : 1px;
             vertical-align: bottom;
             width: 150px;
             object-position: left;
             left: 16%;
             top: 12%;
+            font-family: 'Gamja Flower', cursive;
+            font-weight: bold;
         }
         .kakaomap{
             display: flex;
@@ -149,11 +152,6 @@
         $(document).ready(function () {
             fillblank();
         });
-
-        function  star_cheak(){
-
-        }
-
         function fillblank() {
             $.ajax({
                 type: 'GET',
@@ -171,7 +169,7 @@
                                 <li class="list-group-item">전화번호: ${phoneNumber} </li>
                                 <li class="list-group-item">주소: ${address}</li>
                                `
-                            let filling_b = ` <div id="bbb" class="title"><h1>${hosName}</h1></div>`
+                            let filling_b = ` <div class="title"><h1>${hosName}</h1></div>`
                             $('#fill_card').append(filling_a)
                             $('#fill_title').append(filling_b)
                         }
