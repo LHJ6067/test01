@@ -139,6 +139,11 @@
             background-color: aliceblue;
         }
         @media (max-width: 1245px) {
+            .headWrap {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
             .hosListBox {
                 display: flex;
                 flex-direction: column;
@@ -270,9 +275,12 @@
 </head>
 <body>
 <div class="base">
-    <h1 class="headline"><img class="ggami_icon" src="/static/ggami_icon_background.jpg" width="50px" height="50px"/>까미를
-        부탁해
-    </h1>
+    <div class="headWrap">
+        <h1 class="headline"><img class="ggami_icon" src="/static/ggami_icon_background.jpg" width="50px"
+                                  height="50px"/>까미를
+            부탁해
+        </h1>
+    </div>
     <div class="wrap">
         <div id="guList" class="guList">
             <button onclick="guListing()" class="btn btn-secondary dropdown-toggle" type="button"
